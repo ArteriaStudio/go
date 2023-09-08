@@ -1,1 +1,5 @@
 ﻿package database
+
+func Start() {
+
+}
