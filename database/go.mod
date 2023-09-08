@@ -1,4 +1,4 @@
-module gituhb.com/ArteriaStudio/go/database
+module github.com/ArteriaStudio/go/database
 
 go 1.21.1
 
