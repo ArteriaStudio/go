@@ -15,8 +15,8 @@ func handleError(pErr error) {
 }
 
 // Open データベース接続プールを生成
-func Open(pServerHostName string, pDatabaseName string) (pDatabase *sql.DB) {
-	pParams := "host=" + pServerHostName + " dbname=" + pDatabaseName + " sslmode=disable user=api"
+func Open(pServerHostName string, pDatabaseName string, pUsername string) (pDatabase *sql.DB) {
+	pParams := "host=" + pServerHostName + " dbname=" + pDatabaseName + " sslmode=verify-full user=" + pUsername
 	pDatabase, pErr := sql.Open("postgres", pParams)
 	if pErr != nil {
 		fmt.Println(pErr)
@@ -28,7 +28,7 @@ func Open(pServerHostName string, pDatabaseName string) (pDatabase *sql.DB) {
 			fmt.Printf("FAILED: インスタンス（%s:%s）に接続できませんでした。\n", pServerHostName, pDatabaseName)
 			return nil
 		}
-		fmt.Printf("SUCCESS：データベースインスタンス（%s:%s）に接続しました。\n", pServerHostName, pDatabaseName)
+		fmt.Printf("SUCCESS: データベースインスタンス（%s:%s）に接続しました。\n", pServerHostName, pDatabaseName)
 		pDatabase.Stats()
 	} else {
 		handleError(pErr)
@@ -40,5 +40,5 @@ func Open(pServerHostName string, pDatabaseName string) (pDatabase *sql.DB) {
 // Close データベース接続プールを削除
 func Close(pDatabase *sql.DB) {
 	pDatabase.Close()
-	fmt.Println("SUCCESS：データベースインスタンスから切断しました。")
+	fmt.Println("SUCCESS: データベースインスタンスから切断しました。")
 }
