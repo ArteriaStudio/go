@@ -18,7 +18,7 @@ func main() {
 
 	ListBuckets(pProjectID)
 	ListBucketObjects(pProjectID, pBucketName)
-	Save(pBucketName, "/services/receiver/object1.data")
+	Save(pBucketName, "services/receiver/object1.data")
 }
 
 func CreateClient() (pClient *storage.Client) {
