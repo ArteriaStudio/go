@@ -2,8 +2,10 @@
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
+	"time"
 
 	"cloud.google.com/go/firestore"
 	"google.golang.org/api/iterator"
@@ -18,9 +20,10 @@ type User struct {
 }
 
 type Computer struct {
-	Name  string `firestore:"name"`
-	Ether string `firestore:"ether"`
-	WiFi  string `firestore:"wifi"`
+	Name      string `firestore:"name"`
+	Ether     string `firestore:"ether"`
+	WiFi      string `firestore:"wifi"`
+	Timestamp string `firestore:"timestamp"`
 }
 
 func main() {
@@ -41,7 +44,7 @@ func main() {
 	// データを保存する
 	collectionName := "computers"
 	docID := pComputerName
-	pComputer := Computer{Name: "Alice Smith", Ether: "00:00:00:00:00:00", WiFi: "00:00:00:00:00:01"}
+	pComputer := Computer{Name: "Alice Smith", Ether: "00:00:00:00:00:00", WiFi: "00:00:00:00:00:01", Timestamp: time.Now().String()}
 
 	_, err = client.Collection(collectionName).Doc(docID).Set(ctx, pComputer)
 	if err != nil {
@@ -72,7 +75,13 @@ func main() {
 		}
 		var computer Computer
 		doc.DataTo(&computer)
-		//		fmt.Printf("Retrieved user by query (city=New York):\n%+v\n", computer)
+
+		v, err := json.Marshal(computer)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			fmt.Printf("%s", string(v))
+		}
 		fmt.Printf("Retrieved computer:\n%+v\n", computer)
 	}
 }

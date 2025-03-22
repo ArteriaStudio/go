@@ -2,6 +2,7 @@
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -93,6 +94,13 @@ func get(ctx context.Context, pClient *firestore.Client, w http.ResponseWriter, 
 		var pComputer Computer
 		doc.DataTo(&pComputer)
 		fmt.Fprintf(w, "Retrieved computer:\n%+v\n", pComputer)
+
+		v, err := json.Marshal(pComputer)
+		if err != nil {
+			fmt.Fprintln(w, "%w", err)
+		} else {
+			fmt.Printf("%s", string(v))
+		}
 	}
 	fmt.Fprintf(w, "done.")
 }
