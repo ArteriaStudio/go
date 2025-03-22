@@ -1,4 +1,4 @@
-﻿package startHTTP
+﻿package fireStore
 
 import (
 	"context"
@@ -9,55 +9,78 @@ import (
 	"cloud.google.com/go/firestore"
 	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
 	"google.golang.org/api/iterator"
-	//	"google.golang.org/api/option"
 )
 
 // 構造体でデータの型を定義
-type User struct {
-	Name string `firestore:"name"`
-	Age  int    `firestore:"age"`
-	City string `firestore:"city"`
+type Computer struct {
+	Name       string `firestore:"name"`
+	Ether      string `firestore:"ether"`
+	WiFi       string `firestore:"wifi"`
+	RemoteAddr string `firestore:"remoteaddr"`
 }
 
+// 　インスタンスを初期化
 func init() {
-	functions.HTTP("startHTTP", startHTTP)
+	functions.HTTP("entryPoint", entryPoint)
 }
 
-func startHTTP(w http.ResponseWriter, r *http.Request) {
+// FirebaseプロジェクトIDを設定
+var pProjectID = "spiral-44c1f"
+
+// 　エントリーポイント
+func entryPoint(w http.ResponseWriter, r *http.Request) {
+	//　コンテキスト
 	ctx := context.Background()
-	// FirebaseプロジェクトIDを設定
-	projectID := "spiral-44c1f"
 
 	// Firestoreクライアントを初期化
-	//	client, err := firestore.NewClient(ctx, projectID, option.WithCredentialsFile("D:/home/profiles/Keys/spiral-44c1f-edfb90825b62.json"))
-	client, err := firestore.NewClient(ctx, projectID)
+	pClient, err := firestore.NewClient(ctx, pProjectID)
 	if err != nil {
 		log.Fatalf("firestore.NewClient: %v", err)
 	}
-	defer client.Close()
+	defer pClient.Close()
+
+	fmt.Fprintf(w, "Method: %s\n", r.Method)
+	fmt.Fprintf(w, "URI: %s\n", r.RequestURI)
+	fmt.Fprintf(w, "RemoteAddr: %s\n", r.RemoteAddr)
+
+	if r.Method == "POST" {
+		post(ctx, pClient, w, r)
+	} else if r.Method == "GET" {
+		get(ctx, pClient, w, r)
+	}
+}
+
+// 　POSTメソッド
+func post(ctx context.Context, pClient *firestore.Client, w http.ResponseWriter, r *http.Request) {
 
 	// データを保存する
-	collectionName := "users"
-	docID := "alicesmith"
-	alice := User{Name: "Alice Smith", Age: 20, City: "New York"}
+	collectionName := "computers"
+	docID := "elise"
+	pComputer := Computer{Name: "Alice Smith", Ether: "", WiFi: "", RemoteAddr: r.RemoteAddr}
 
-	_, err = client.Collection(collectionName).Doc(docID).Set(ctx, alice)
+	_, err := pClient.Collection(collectionName).Doc(docID).Set(ctx, pComputer)
 	if err != nil {
-		log.Fatalf("Failed to add user: %v", err)
+		log.Fatalf("Failed to add computer: %v", err)
 	}
-	fmt.Printf("Added user: %v\n", alice)
+	fmt.Fprintf(w, "Added computer: %v\n", pComputer)
+}
 
+// 　GETメソッド
+func get(ctx context.Context, pClient *firestore.Client, w http.ResponseWriter, r *http.Request) {
 	// データを取得する (ドキュメントIDを指定)
-	doc, err := client.Collection(collectionName).Doc(docID).Get(ctx)
+	collectionName := "computers"
+	docID := "elise"
+
+	doc, err := pClient.Collection(collectionName).Doc(docID).Get(ctx)
 	if err != nil {
 		log.Fatalf("Failed to get user: %v", err)
 	}
-	var retrievedAlice User
-	doc.DataTo(&retrievedAlice)
-	fmt.Printf("Retrieved user by ID:\n%+v\n", retrievedAlice)
+	var retrievedData Computer
+	doc.DataTo(&retrievedData)
+	fmt.Printf("Retrieved user by ID:\n%+v\n", retrievedData)
 
 	// データを取得する (クエリを使用)
-	query := client.Collection(collectionName).Where("city", "==", "New York")
+	query := pClient.Collection(collectionName)
 	iter := query.Documents(ctx)
 	for {
 		doc, err := iter.Next()
@@ -67,9 +90,9 @@ func startHTTP(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatalf("Failed to iterate: %v", err)
 		}
-		var user User
-		doc.DataTo(&user)
-		fmt.Printf("Retrieved user by query (city=New York):\n%+v\n", user)
+		var pComputer Computer
+		doc.DataTo(&pComputer)
+		fmt.Fprintf(w, "Retrieved computer:\n%+v\n", pComputer)
 	}
 	fmt.Fprintf(w, "done.")
 }
