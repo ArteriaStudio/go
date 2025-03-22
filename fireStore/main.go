@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	"cloud.google.com/go/firestore"
@@ -27,6 +28,10 @@ type Computer struct {
 }
 
 func main() {
+	pURI := "/computers/elise"
+	pResults := strings.Split(pURI, "/")
+	fmt.Println(pResults)
+
 	pComputerName := "elise"
 
 	ctx := context.Background()
