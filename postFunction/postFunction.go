@@ -15,11 +15,18 @@ import (
 	"google.golang.org/api/iterator"
 )
 
+type NIC struct {
+	Name   string `firestore:"name"`
+	HWAddr string `firestore:"hwaddr"`
+}
+
 // 構造体でデータの型を定義
 type Computer struct {
 	Name       string `firestore:"name"`
+	Domain     string `firestore:"domain"`
 	Ether      string `firestore:"ether"`
 	WiFi       string `firestore:"wifi"`
+	Adapters   []NIC
 	RemoteAddr string `firestore:"remoteaddr"`
 	Timestamp  string `firestore:"timestamp"`
 }
@@ -56,7 +63,7 @@ func entryPoint(w http.ResponseWriter, r *http.Request) {
 	} else {
 		pCollection := pResults[1]
 		pResourceId := pResults[2]
-		if pCollection == "" {
+		if !IsExistCollection(pCollection) {
 			return
 		}
 		fmt.Fprintf(w, "Collection: %s\n", pCollection)
@@ -84,13 +91,16 @@ func post(w http.ResponseWriter, r *http.Request, pContext context.Context, pCli
 	pBytes, err := io.ReadAll(r.Body)
 	if err != nil {
 		//　期待した形式のリクエストボディなのでリクエストを無視
+		fmt.Fprintln(w, "%w", err)
 		return
 	}
+	fmt.Fprintf(w, "%s", string(pBytes))
 
 	var pRequest Computer
 	pError := json.Unmarshal(pBytes, &pRequest)
 	if pError != nil {
-		fmt.Fprintln(w, "%w", pError)
+		fmt.Fprintln(w, "Unmarshal: %w", pError)
+		return
 	} else {
 		fmt.Fprintf(w, "body: %s\n", string(pBytes))
 		fmt.Fprintf(w, "Name: %s\n", pRequest.Name)
@@ -98,7 +108,7 @@ func post(w http.ResponseWriter, r *http.Request, pContext context.Context, pCli
 		fmt.Fprintf(w, "Wi-Fi: %s\n", pRequest.WiFi)
 	}
 
-	pComputer := Computer{Name: pRequest.Name, Ether: pRequest.Ether, WiFi: pRequest.WiFi, RemoteAddr: r.RemoteAddr, Timestamp: time.Now().String()}
+	pComputer := Computer{Name: pRequest.Name, Domain: pRequest.Domain, Ether: pRequest.Ether, WiFi: pRequest.WiFi, RemoteAddr: r.RemoteAddr, Timestamp: time.Now().String()}
 
 	_, err = pClient.Collection(collectionName).Doc(docID).Set(pContext, pComputer)
 	if err != nil {
@@ -145,4 +155,19 @@ func get(w http.ResponseWriter, r *http.Request, pContext context.Context, pClie
 			fmt.Printf("%s", string(v))
 		}
 	}
+}
+
+// 　既知のコレクション名であるかを確認
+func IsExistCollection(pCollection string) bool {
+	if pCollection == "" {
+		return false
+	}
+	if pCollection == "computers" {
+		return true
+	}
+	if pCollection == "logging" {
+		return true
+	}
+
+	return false
 }
