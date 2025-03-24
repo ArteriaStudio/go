@@ -50,7 +50,7 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Fprintf(w, "%s", string(pBytes))
-	fmt.Printf("%s", string(pBytes))
+	fmt.Printf("%s\n", string(pBytes))
 
 	var pRequest Computer
 	pError := json.Unmarshal(pBytes, &pRequest)
