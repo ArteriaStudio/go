@@ -1,4 +1,4 @@
-﻿package fireStore
+﻿package main
 
 import (
 	"context"
@@ -31,16 +31,39 @@ type Computer struct {
 	Timestamp  string `firestore:"timestamp"`
 }
 
-// 　インスタンスを初期化
+// インスタンスを初期化
 func init() {
-	functions.HTTP("entryPoint", entryPoint)
+	functions.HTTP("entryPoint", EntryPoint)
 }
 
 // FirebaseプロジェクトIDを設定
 var pProjectID = "spiral-44c1f"
 
 // 　エントリーポイント
-func entryPoint(w http.ResponseWriter, r *http.Request) {
+func EntryPoint(w http.ResponseWriter, r *http.Request) {
+
+	//　リクエストボディを入力する。
+	pBytes, err := io.ReadAll(r.Body)
+	if err != nil {
+		//　期待した形式のリクエストボディなのでリクエストを無視
+		fmt.Fprintln(w, "%w", err)
+		return
+	}
+	fmt.Fprintf(w, "%s", string(pBytes))
+	fmt.Printf("%s", string(pBytes))
+
+	var pRequest Computer
+	pError := json.Unmarshal(pBytes, &pRequest)
+	if pError != nil {
+		fmt.Fprintln(w, "Unmarshal: %w", pError)
+		return
+	} else {
+		fmt.Fprintf(w, "body: %s\n", string(pBytes))
+		fmt.Fprintf(w, "Name: %s\n", pRequest.Name)
+		fmt.Fprintf(w, "Ether: %s\n", pRequest.Ether)
+		fmt.Fprintf(w, "Wi-Fi: %s\n", pRequest.WiFi)
+	}
+
 	//　コンテキスト
 	pContext := context.Background()
 
