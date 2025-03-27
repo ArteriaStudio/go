@@ -110,6 +110,7 @@ func post(w http.ResponseWriter, r *http.Request, pContext context.Context, pCli
 	}
 
 	pComputer := Computer{Name: pRequest.Name, Domain: pRequest.Domain, Ether: pRequest.Ether, WiFi: pRequest.WiFi, RemoteAddr: r.RemoteAddr, Timestamp: time.Now().String()}
+	pComputer.Adapters = append(pComputer.Adapters, pRequest.Adapters...)
 
 	_, err = pClient.Collection(collectionName).Doc(docID).Set(pContext, pComputer)
 	if err != nil {
