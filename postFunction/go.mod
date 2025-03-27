@@ -1,4 +1,4 @@
-module arteria-s.net/fs
+module arteria-s.net/postFunction
 
 go 1.23.0
 

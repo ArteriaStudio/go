@@ -42,6 +42,14 @@ func main() {
 		fmt.Println("Unmarshal: %w", pError)
 		return
 	}
+
+	pBytes2, pError := json.Marshal(pRequest)
+	if pError != nil {
+		fmt.Println("Unmarshal: %w", pError)
+		return
+	}
+	fmt.Printf("Marshal... %s\n", string(pBytes2))
+
 }
 
 func main2() {
