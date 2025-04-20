@@ -16,8 +16,9 @@ import (
 )
 
 type NIC struct {
-	Name   string `firestore:"name"`
-	HWAddr string `firestore:"hwaddr"`
+	Name        string `firestore:"name"`
+	HWAddr      string `firestore:"hwaddr"`
+	Description string `firestore:"Description"`
 }
 
 // 構造体でデータの型を定義
@@ -26,6 +27,8 @@ type Computer struct {
 	Domain     string `firestore:"domain"`
 	Ether      string `firestore:"ether"`
 	WiFi       string `firestore:"wifi"`
+	UniqueID   string `firestore:"UniqueID"`
+	SerialNo   string `firestore:"SerialNo"`
 	Adapters   []NIC
 	RemoteAddr string `firestore:"remoteaddr"`
 	Timestamp  string `firestore:"timestamp"`
@@ -109,7 +112,7 @@ func post(w http.ResponseWriter, r *http.Request, pContext context.Context, pCli
 		fmt.Fprintf(w, "Wi-Fi: %s\n", pRequest.WiFi)
 	}
 
-	pComputer := Computer{Name: pRequest.Name, Domain: pRequest.Domain, Ether: pRequest.Ether, WiFi: pRequest.WiFi, RemoteAddr: r.RemoteAddr, Timestamp: time.Now().String()}
+	pComputer := Computer{Name: pRequest.Name, Domain: pRequest.Domain, Ether: pRequest.Ether, WiFi: pRequest.WiFi, UniqueID: pRequest.UniqueID, SerialNo: pRequest.SerialNo, RemoteAddr: r.RemoteAddr, Timestamp: time.Now().String()}
 	pComputer.Adapters = append(pComputer.Adapters, pRequest.Adapters...)
 
 	_, err = pClient.Collection(collectionName).Doc(docID).Set(pContext, pComputer)
