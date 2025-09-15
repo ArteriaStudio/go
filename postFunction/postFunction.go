@@ -34,6 +34,15 @@ type Computer struct {
 	Timestamp  string `firestore:"timestamp"`
 }
 
+type Session struct {
+	Name       string `firestore:"ComputerName"`
+	Domain     string `firestore:"DomainName"`
+	EventType  int32  `firestore:"EventType"`
+	UserName   string `firestore:"UserName"`
+	RemoteAddr string `firestore:"remoteaddr"`
+	Timestamp  string `firestore:"TimeStamp"`
+}
+
 // インスタンスを初期化
 func init() {
 	functions.HTTP("entryPoint", EntryPoint)
@@ -85,11 +94,6 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 
 // 　POSTメソッド
 func post(w http.ResponseWriter, r *http.Request, pContext context.Context, pClient *firestore.Client, pCollection string, pResourceId string) {
-
-	// データを保存する
-	collectionName := pCollection
-	docID := pResourceId
-
 	//　リクエストボディを入力する。
 	pBytes, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -99,6 +103,20 @@ func post(w http.ResponseWriter, r *http.Request, pContext context.Context, pCli
 	}
 	pText := string(pBytes)
 	fmt.Fprintf(w, "<<%s>>", pText)
+
+	switch pCollection {
+	case "computers":
+		postComputers(w, r, pContext, pClient, pCollection, pResourceId, pBytes)
+	case "sessions":
+		postSessions(w, r, pContext, pClient, pCollection, pResourceId, pBytes)
+	}
+}
+
+// postComputers
+func postComputers(w http.ResponseWriter, r *http.Request, pContext context.Context, pClient *firestore.Client, pCollection string, pResourceId string, pBytes []byte) {
+	// データを保存する
+	collectionName := pCollection
+	docID := pResourceId
 
 	var pRequest Computer
 	pError := json.Unmarshal(pBytes, &pRequest)
@@ -115,11 +133,38 @@ func post(w http.ResponseWriter, r *http.Request, pContext context.Context, pCli
 	pComputer := Computer{Name: pRequest.Name, Domain: pRequest.Domain, Ether: pRequest.Ether, WiFi: pRequest.WiFi, UniqueID: pRequest.UniqueID, SerialNo: pRequest.SerialNo, RemoteAddr: r.RemoteAddr, Timestamp: time.Now().String()}
 	pComputer.Adapters = append(pComputer.Adapters, pRequest.Adapters...)
 
-	_, err = pClient.Collection(collectionName).Doc(docID).Set(pContext, pComputer)
+	_, err := pClient.Collection(collectionName).Doc(docID).Set(pContext, pComputer)
 	if err != nil {
 		log.Fatalf("Failed to add computer: %v", err)
 	}
 	fmt.Fprintf(w, "Added computer: %v\n", pComputer)
+}
+
+// postSessions
+func postSessions(w http.ResponseWriter, r *http.Request, pContext context.Context, pClient *firestore.Client, pCollection string, pResourceId string, pBytes []byte) {
+	// データを保存する
+	collectionName := pCollection
+	docID := pResourceId
+
+	var pRequest Session
+	pError := json.Unmarshal(pBytes, &pRequest)
+	if pError != nil {
+		fmt.Fprintln(w, "Unmarshal: %w", pError)
+		return
+	} else {
+		fmt.Fprintf(w, "body: %s\n", string(pBytes))
+		fmt.Fprintf(w, "Name: %s\n", pRequest.Name)
+		fmt.Fprintf(w, "EventType: %d\n", pRequest.EventType)
+		fmt.Fprintf(w, "UserName: %s\n", pRequest.UserName)
+	}
+
+	pSession := Session{Name: pRequest.Name, Domain: pRequest.Domain, EventType: pRequest.EventType, UserName: pRequest.UserName, RemoteAddr: r.RemoteAddr, Timestamp: time.Now().String()}
+
+	_, err := pClient.Collection(collectionName).Doc(docID).Set(pContext, pSession)
+	if err != nil {
+		log.Fatalf("Failed to add sessions: %v", err)
+	}
+	fmt.Fprintf(w, "Added Session: %v\n", pSession)
 }
 
 // 　GETメソッド
@@ -171,6 +216,9 @@ func IsExistCollection(pCollection string) bool {
 		return true
 	}
 	if pCollection == "logging" {
+		return true
+	}
+	if pCollection == "sessions" {
 		return true
 	}
 
