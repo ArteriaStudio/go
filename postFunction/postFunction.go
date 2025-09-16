@@ -153,7 +153,8 @@ func postSessions(w http.ResponseWriter, r *http.Request, pContext context.Conte
 		return
 	} else {
 		fmt.Fprintf(w, "body: %s\n", string(pBytes))
-		fmt.Fprintf(w, "Name: %s\n", pRequest.Name)
+		fmt.Fprintf(w, "ComputerName: %s\n", pRequest.ComputerName)
+		fmt.Fprintf(w, "DomainName: %s\n", pRequest.DomainName)
 		fmt.Fprintf(w, "EventType: %d\n", pRequest.EventType)
 		fmt.Fprintf(w, "UserName: %s\n", pRequest.UserName)
 	}
