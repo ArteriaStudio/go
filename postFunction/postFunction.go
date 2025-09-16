@@ -158,7 +158,7 @@ func postSessions(w http.ResponseWriter, r *http.Request, pContext context.Conte
 		fmt.Fprintf(w, "UserName: %s\n", pRequest.UserName)
 	}
 
-	pSession := Session{Name: pRequest.Name, Domain: pRequest.Domain, EventType: pRequest.EventType, UserName: pRequest.UserName, RemoteAddr: r.RemoteAddr, Timestamp: time.Now().String()}
+	pSession := Session{ComputerName: pRequest.ComputerName, DomainName: pRequest.DomainName, EventType: pRequest.EventType, UserName: pRequest.UserName, RemoteAddr: r.RemoteAddr, Timestamp: time.Now().String()}
 
 	_, err := pClient.Collection(collectionName).Doc(docID).Set(pContext, pSession)
 	if err != nil {
