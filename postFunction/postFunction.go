@@ -35,12 +35,12 @@ type Computer struct {
 }
 
 type Session struct {
-	Name       string `firestore:"ComputerName"`
-	Domain     string `firestore:"DomainName"`
-	EventType  int32  `firestore:"EventType"`
-	UserName   string `firestore:"UserName"`
-	RemoteAddr string `firestore:"remoteaddr"`
-	Timestamp  string `firestore:"TimeStamp"`
+	ComputerName string `firestore:"ComputerName"`
+	DomainName   string `firestore:"DomainName"`
+	EventType    int32  `firestore:"EventType"`
+	UserName     string `firestore:"UserName"`
+	RemoteAddr   string `firestore:"remoteaddr"`
+	Timestamp    string `firestore:"TimeStamp"`
 }
 
 // インスタンスを初期化
