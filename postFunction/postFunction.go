@@ -45,7 +45,7 @@ type Session struct {
 
 // インスタンスを初期化
 func init() {
-	functions.HTTP("entryPoint", EntryPoint)
+	functions.HTTP("EntryPoint", EntryPoint)
 }
 
 // FirebaseプロジェクトIDを設定
