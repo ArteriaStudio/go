@@ -161,7 +161,9 @@ func postSessions(w http.ResponseWriter, r *http.Request, pContext context.Conte
 
 	pSession := Session{ComputerName: pRequest.ComputerName, DomainName: pRequest.DomainName, EventType: pRequest.EventType, UserName: pRequest.UserName, RemoteAddr: r.RemoteAddr, Timestamp: time.Now().String()}
 
-	_, err := pClient.Collection(collectionName).Doc(docID).Set(pContext, pSession)
+	timeStamp := pSession.Timestamp
+	_, err := pClient.Collection(collectionName).Doc(docID).Collection("Activity").Doc(timeStamp).Set(pContext, pSession)
+	//	_, err := pClient.Collection(collectionName).Doc(docID).Set(pContext, pSession)
 	if err != nil {
 		log.Fatalf("Failed to add sessions: %v", err)
 	}
