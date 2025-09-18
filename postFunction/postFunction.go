@@ -160,7 +160,8 @@ func postSessions(w http.ResponseWriter, r *http.Request, pContext context.Conte
 		fmt.Fprintf(w, "Timestamp: %s\n", pRequest.Timestamp)
 	}
 
-	pSession := Session{ComputerName: pRequest.ComputerName, DomainName: pRequest.DomainName, EventType: pRequest.EventType, UserName: pRequest.UserName, RemoteAddr: r.RemoteAddr, Timestamp: pRequest.Timestamp}
+	pEventType := getEventTypeName(pRequest.EventType)
+	pSession := Session{ComputerName: pRequest.ComputerName, DomainName: pRequest.DomainName, EventType: pEventType, UserName: pRequest.UserName, RemoteAddr: r.RemoteAddr, Timestamp: time.Now().String()}
 
 	timeStamp := pSession.Timestamp
 	_, err := pClient.Collection(collectionName).Doc(docID).Collection("Activity").Doc(timeStamp).Set(pContext, pSession)
@@ -227,4 +228,23 @@ func IsExistCollection(pCollection string) bool {
 	}
 
 	return false
+}
+
+// 　指定されたイベント種類を文字列に変換
+func getEventTypeName(dwEventType int32) string {
+	mEventType := map[int32]string{
+		0x1: "WTS_CONSOLE_CONNECT",
+		0x2: "WTS_CONSOLE_DISCONNECT",
+		0x3: "WTS_REMOTE_CONNECT",
+		0x4: "WTS_REMOTE_DISCONNECT",
+		0x5: "WTS_SESSION_LOGON",
+		0x6: "WTS_SESSION_LOGOFF",
+		0x7: "WTS_SESSION_LOCK",
+		0x8: "WTS_SESSION_UNLOCK",
+		0x9: "WTS_SESSION_REMOTE_CONTROL",
+		0xa: "WTS_SESSION_CREATE",
+		0xb: "WTS_SESSION_TERMINATE",
+	}
+
+	return (mEventType[dwEventType])
 }
