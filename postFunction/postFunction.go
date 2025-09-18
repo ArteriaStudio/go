@@ -38,6 +38,7 @@ type Session struct {
 	ComputerName string `firestore:"ComputerName"`
 	DomainName   string `firestore:"DomainName"`
 	EventType    int32  `firestore:"EventType"`
+	EventName    string `firestore:"EventName"`
 	UserName     string `firestore:"UserName"`
 	RemoteAddr   string `firestore:"remoteaddr"`
 	Timestamp    string `firestore:"TimeStamp"`
@@ -160,8 +161,8 @@ func postSessions(w http.ResponseWriter, r *http.Request, pContext context.Conte
 		fmt.Fprintf(w, "Timestamp: %s\n", pRequest.Timestamp)
 	}
 
-	pEventType := getEventTypeName(pRequest.EventType)
-	pSession := Session{ComputerName: pRequest.ComputerName, DomainName: pRequest.DomainName, EventType: pEventType, UserName: pRequest.UserName, RemoteAddr: r.RemoteAddr, Timestamp: time.Now().String()}
+	pEventName := getEventTypeName(pRequest.EventType)
+	pSession := Session{ComputerName: pRequest.ComputerName, DomainName: pRequest.DomainName, EventType: pRequest.EventType, EventName: pEventName, UserName: pRequest.UserName, RemoteAddr: r.RemoteAddr, Timestamp: time.Now().String()}
 
 	timeStamp := pSession.Timestamp
 	_, err := pClient.Collection(collectionName).Doc(docID).Collection("Activity").Doc(timeStamp).Set(pContext, pSession)
