@@ -1,21 +1,16 @@
 // 　OAUTH2 認証コード受け取り（acceptor）
-package main
+package acceptor
 
 import (
 	"fmt"
 	"net/http"
 	"strings"
+
+	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
 )
 
-func main() {
-	port := "80"
-
-	http.HandleFunc("/", EntryPoint)
-
-	fmt.Printf("Listening on port %s\n", port)
-	if err := http.ListenAndServe(":"+port, nil); err != nil {
-		fmt.Printf("ListenAndServe: %v\n", err)
-	}
+func init() {
+	functions.HTTP("EntryPoint", EntryPoint)
 }
 
 // 　エントリーポイント
@@ -40,6 +35,7 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Fprintf(w, "ResourceId: %s\n", pResourceId)
 	}
+	fmt.Fprint(w, pResults)
 }
 
 // 　既知のコレクション名であるかを確認
