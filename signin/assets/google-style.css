@@ -1,0 +1,60 @@
+/* Googleが推奨するフォント（Roboto）を読み込む */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+
+.google-sign-in-btn {
+    /* ボタンの基本的なスタイル */
+    display: inline-flex; /* 要素をインラインにしつつflexboxを使用 */
+    align-items: center; /* 垂直方向の中央揃え */
+    cursor: pointer;
+    text-decoration: none; /* <a>タグの下線を削除 */
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+
+    /* Googleのブランドカラーと形状 */
+    background-color: #4285F4; /* Google Blue */
+    color: #fff; /* テキストカラーは白 */
+    border: 1px solid transparent; /* 枠線 */
+    border-radius: 2px; /* 角の丸み */
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25); /* 影 */
+
+    /* 内側の余白 */
+    padding: 0; /* 全体のパディングは0 */
+    height: 40px; /* 推奨される高さ */
+    overflow: hidden; /* ロゴラッパーからはみ出る部分を非表示 */
+}
+
+/* ホバー時のスタイル（オプション） */
+.google-sign-in-btn:hover {
+    background-color: #3b78e7;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* Google 'G' ロゴが入るラッパー */
+.google-icon-wrapper {
+    /* ロゴ領域のスタイル */
+    height: 100%; /* 親要素と同じ高さ */
+    width: 40px; /* アイコンサイズ */
+    background-color: #fff; /* 背景は白 */
+    display: flex;
+    justify-content: center; /* 水平方向の中央揃え */
+    align-items: center; /* 垂直方向の中央揃え */
+    padding: 0;
+    margin-right: 1px; /* テキストとの間にわずかな隙間 */
+    border-radius: 2px 0 0 2px; /* 左側だけ角を丸く */
+}
+
+/* SVGアイコンのスタイル */
+.google-icon {
+    width: 18px; /* アイコンの実際のサイズ */
+    height: 18px;
+    vertical-align: middle;
+}
+
+/* ボタンテキストのスタイル */
+.btn-text {
+    /* テキストの余白 */
+    padding: 0 16px;
+    line-height: 40px; /* 高さと合わせることで垂直方向の中央揃え */
+    white-space: nowrap; /* テキストの折り返しを防ぐ */
+}

@@ -1,0 +1,67 @@
+2025/10/20 15:32:20 EventInfo: 
+{
+	"@odata.context":"https://graph.microsoft.com/v1.0/$metadata#users('6e7659a9-7c2c-489e-afae-69af75c5a661')/events/$entity",
+	"@odata.etag":"W/\"vBbbDiJ270ui3dJFyvq8DgADPKDcBA==\"",
+	"id":"AAMkADE0MWM1NGJhLWQ1YTktNDlkOS1hYjYxLTFjYWM3ZDFiZjExNQBGAAAAAADE5v8Uug9TTrntSBTz5tQFBwC8FtsOInbvS6Ld0kXK_rwOAAAAAAENAAC8FtsOInbvS6Ld0kXK_rwOAAM8isk-AAA=",
+	"createdDateTime":"2025-10-20T01:31:15.2641325Z",
+	"lastModifiedDateTime":"2025-10-20T06:32:20.075826Z",
+	"changeKey":"vBbbDiJ270ui3dJFyvq8DgADPKDcBA==",
+	"categories":[],
+	"transactionId":"localevent:69dc289c-54ef-8312-4ff7-fccb7279f22d",
+	"originalStartTimeZone":"Tokyo Standard Time",
+	"originalEndTimeZone":"Tokyo Standard Time",
+	"iCalUId":"040000008200E00074C5B7101A82E008000000004BB1DB396141DC010000000000000000100000008A7D4E06634E4F4BAC94ED3A12B51732",
+	"uid":"040000008200E00074C5B7101A82E008000000004BB1DB396141DC010000000000000000100000008A7D4E06634E4F4BAC94ED3A12B51732",
+	"reminderMinutesBeforeStart":15,
+	"isReminderOn":true,
+	"hasAttachments":false,
+	"subject":"\u30bf\u30a4\u30c8\u30eb\u3092\u66f4\u65b0",
+	"importance":"normal",
+	"sensitivity":"normal",
+	"isAllDay":false,
+	"isCancelled":false,
+	"isOrganizer":true,
+	"responseRequested":true,
+	"seriesMasterId":null,
+	"showAs":"busy",
+	"type":"singleInstance",
+	"webLink":"https://outlook.office365.com/owa/?itemid=AAMkADE0MWM1NGJhLWQ1YTktNDlkOS1hYjYxLTFjYWM3ZDFiZjExNQBGAAAAAADE5v8Uug9TTrntSBTz5tQFBwC8FtsOInbvS6Ld0kXK%2BrwOAAAAAAENAAC8FtsOInbvS6Ld0kXK%2BrwOAAM8isk%2FAAA%3D&exvsurl=1&path=/calendar/item",
+	"onlineMeetingUrl":null,
+	"isOnlineMeeting":false,
+	"onlineMeetingProvider":"unknown",
+	"allowNewTimeProposals":true,
+	"occurrenceId":null,
+	"isDraft":false,
+	"hideAttendees":false,
+	"responseStatus":{
+		"response":"organizer",
+		"time":"0001-01-01T00:00:00Z"
+	},
+	"start":{
+		"dateTime":"2025-10-21T03:00:00.0000000",
+		"timeZone":"UTC"
+	},
+	"end":{
+		"dateTime":"2025-10-21T03:30:00.0000000",
+		"timeZone":"UTC"
+	},
+	"location":{
+		"displayName":"",
+		"locationType":"default",
+		"uniqueIdType":"unknown",
+		"address":{},
+		"coordinates":{}
+	},
+	"locations":[],
+	"recurrence":null,
+	"attendees":[],
+	"organizer":{
+		"emailAddress":{
+			"name":"\u77f3\u962a \u654f\u4e00",
+			"address":"rink@0adrastea.onmicrosoft.com"
+		}
+	},
+	"onlineMeeting":null,
+	"calendar@odata.associationLink":"https://graph.microsoft.com/v1.0/Users('6e7659a9-7c2c-489e-afae-69af75c5a661')/calendar/$ref",
+	"calendar@odata.navigationLink":"https://graph.microsoft.com/v1.0/Users('6e7659a9-7c2c-489e-afae-69af75c5a661')/calendar"
+}
