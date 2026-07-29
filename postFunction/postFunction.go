@@ -85,10 +85,13 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Fprintf(w, "ResourceId: %s\n", pResourceId)
 
-		if r.Method == "POST" {
+		switch r.Method {
+		case "POST":
 			post(w, r, pContext, pClient, pCollection, pResourceId)
-		} else if r.Method == "GET" {
+		case "GET":
 			get(w, r, pContext, pClient, pCollection, pResourceId)
+		default:
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
 	}
 }
